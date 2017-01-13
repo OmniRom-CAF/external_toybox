@@ -73,6 +73,8 @@ void get_optflags(void);
 #define DIRTREE_SHUTUP      16
 // Breadth first traversal, conserves filehandles at the expense of memory
 #define DIRTREE_BREADTH     32
+// skip non-numeric entries
+#define DIRTREE_PROC        64
 // Don't look at any more files in this directory.
 #define DIRTREE_ABORT      256
 
@@ -88,6 +90,7 @@ struct dirtree {
   char name[];
 };
 
+int isdotdot(char *name);
 struct dirtree *dirtree_add_node(struct dirtree *p, char *name, int flags);
 char *dirtree_path(struct dirtree *node, int *plen);
 int dirtree_notdotdot(struct dirtree *catch);
