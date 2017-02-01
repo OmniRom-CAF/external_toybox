@@ -157,6 +157,15 @@ struct ifconfig_data {
   int sockfd;
 };
 
+// toys/net/microcom.c
+
+struct microcom_data {
+  char *s;
+
+  int fd;
+  struct termios original_stdin_state, original_fd_state;
+};
+
 // toys/net/netcat.c
 
 struct netcat_data {
@@ -698,15 +707,6 @@ struct lsof_data {
   int shown_header;
 };
 
-// toys/pending/microcom.c
-
-struct microcom_data {
-  char *speed;
-
-  int fd;
-  struct termios original_stdin_state, original_fd_state;
-};
-
 // toys/pending/mke2fs.c
 
 struct mke2fs_data {
@@ -739,12 +739,13 @@ struct mke2fs_data {
 // toys/pending/modprobe.c
 
 struct modprobe_data {
+  struct arg_list *dirs;
+
   struct arg_list *probes;
   struct arg_list *dbase[256];
   char *cmdopts;
   int nudeps;
   uint8_t symreq;
-  void (*dbg)(char *format, ...);
 };
 
 // toys/pending/more.c
@@ -1397,6 +1398,7 @@ extern union global_union {
 	struct umount_data umount;
 	struct ftpget_data ftpget;
 	struct ifconfig_data ifconfig;
+	struct microcom_data microcom;
 	struct netcat_data netcat;
 	struct netstat_data netstat;
 	struct tunctl_data tunctl;
@@ -1456,7 +1458,6 @@ extern union global_union {
 	struct last_data last;
 	struct logger_data logger;
 	struct lsof_data lsof;
-	struct microcom_data microcom;
 	struct mke2fs_data mke2fs;
 	struct modprobe_data modprobe;
 	struct more_data more;
