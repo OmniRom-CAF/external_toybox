@@ -213,6 +213,14 @@ int main(int argc, char *argv[])
   }
   *argv = getbasename(*argv);
 
+  // Up to and including Android M, bionic's dynamic linker added a handler to
+  // cause a crash dump on SIGPIPE. That was removed in Android N, but adbd
+  // was still setting the SIGPIPE disposition to SIG_IGN, and its children
+  // were inheriting that. In Android O, adbd is fixed, but manually asking
+  // for the default disposition is harmless, and it'll be a long time before
+  // no one's using anything older than O!
+  if (CFG_TOYBOX_ON_ANDROID) signal(SIGPIPE, SIG_DFL);
+
   // If nommu can't fork, special reentry path.
   // Use !stacktop to signal "vfork happened", both before and after xexec()
   if (!CFG_TOYBOX_FORK) {
